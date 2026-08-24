@@ -1,0 +1,25 @@
+{
+  "name": "opshub",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspaces --if-present",
+    "dev:api": "npm run dev -w @opshub/api",
+    "dev:web": "npm run dev -w @opshub/web",
+    "build": "npm run build --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "graphify": "bash scripts/graphify.sh build",
+    "graphify:update": "bash scripts/graphify.sh update",
+    "graphify:query": "bash scripts/graphify.sh query",
+    "graphify:install-cursor": "bash scripts/graphify.sh install-cursor"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

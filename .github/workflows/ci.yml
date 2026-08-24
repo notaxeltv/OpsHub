@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches: [main, 'cursor/**']
+  pull_request:
+    branches: [main]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: opshub
+          POSTGRES_PASSWORD: opshub
+          POSTGRES_DB: opshub
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Generate Prisma client
+        run: npm run prisma:generate -w @opshub/api
+        env:
+          DATABASE_URL: postgresql://opshub:opshub@localhost:5432/opshub?schema=public
+
+      - name: Run migrations
+        run: npm run prisma:deploy -w @opshub/api
+        env:
+          DATABASE_URL: postgresql://opshub:opshub@localhost:5432/opshub?schema=public
+
+      - name: Lint
+        run: npm run lint --if-present
+
+      - name: Type check
+        run: npm run typecheck --if-present
+
+      - name: Unit tests
+        run: npm run test -w @opshub/api
+
+      - name: E2E tests
+        run: npm run test:e2e -w @opshub/api
+        env:
+          DATABASE_URL: postgresql://opshub:opshub@localhost:5432/opshub?schema=public
+          JWT_SECRET: test-secret
+          JWT_REFRESH_SECRET: test-refresh-secret
+
+      - name: Build
+        run: npm run build --if-present

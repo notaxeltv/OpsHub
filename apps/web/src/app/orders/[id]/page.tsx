@@ -1,0 +1,135 @@
+'use client';
+
+import { use, useState } from 'react';
+import Link from 'next/link';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { AppShell } from '@/components/layout/app-shell';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { api } from '@/lib/api';
+import { formatCurrency } from '@/lib/format';
+import { StatusBadge } from '@/components/status-badge';
+
+export default function OrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
+  const queryClient = useQueryClient();
+  const [hours, setHours] = useState('2');
+  const [materialCost, setMaterialCost] = useState('0');
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['order', id],
+    queryFn: () => api.orders.get(id),
+  });
+
+  const productionMutation = useMutation({
+    mutationFn: () =>
+      api.production.create({
+        orderId: id,
+        hours: parseFloat(hours),
+        materialCost: parseFloat(materialCost),
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['order', id] });
+      setHours('2');
+      setMaterialCost('0');
+    },
+  });
+
+  if (isLoading) return <AppShell><p>Caricamento...</p></AppShell>;
+
+  const order = data as {
+    reference: string;
+    title: string;
+    status: string;
+    customer: { name: string };
+    items: Array<{ description: string; quantity: number; unitPrice: number }>;
+    productionEntries: Array<{ id: string; hours: number; materialCost: number; date: string }>;
+    margin: { revenue: number; totalCost: number; margin: number; marginPercent: number; laborCost: number; materialCost: number };
+  };
+
+  return (
+    <AppShell>
+      <div className="mb-6">
+        <Link href="/orders" className="text-sm text-primary hover:underline">← Commesse</Link>
+        <div className="mt-2 flex items-center gap-3">
+          <h2 className="text-3xl font-bold">{order.reference}</h2>
+          <StatusBadge status={order.status} />
+        </div>
+        <p className="text-muted-foreground">{order.title} · {order.customer.name}</p>
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-3">
+        <Card className="lg:col-span-2">
+          <CardHeader><CardTitle className="text-lg">Righe commessa</CardTitle></CardHeader>
+          <CardContent>
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b text-left text-muted-foreground">
+                  <th className="pb-2">Descrizione</th>
+                  <th className="pb-2">Qtà</th>
+                  <th className="pb-2">Prezzo</th>
+                  <th className="pb-2">Totale</th>
+                </tr>
+              </thead>
+              <tbody>
+                {order.items.map((item, i) => (
+                  <tr key={i} className="border-b">
+                    <td className="py-2">{item.description}</td>
+                    <td className="py-2">{item.quantity}</td>
+                    <td className="py-2">{formatCurrency(item.unitPrice)}</td>
+                    <td className="py-2">{formatCurrency(item.quantity * item.unitPrice)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader><CardTitle className="text-lg">Margini</CardTitle></CardHeader>
+          <CardContent className="space-y-2 text-sm">
+            <p>Ricavi: <strong>{formatCurrency(order.margin.revenue)}</strong></p>
+            <p>Costo manodopera: {formatCurrency(order.margin.laborCost)}</p>
+            <p>Costo materiali: {formatCurrency(order.margin.materialCost)}</p>
+            <p>Costi totali: {formatCurrency(order.margin.totalCost)}</p>
+            <p className="text-lg font-bold text-primary">
+              Margine: {formatCurrency(order.margin.margin)} ({order.margin.marginPercent}%)
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="mt-6 grid gap-6 lg:grid-cols-2">
+        <Card>
+          <CardHeader><CardTitle className="text-lg">Registra produzione</CardTitle></CardHeader>
+          <CardContent className="space-y-4">
+            <div><Label>Ore</Label><Input type="number" value={hours} onChange={(e) => setHours(e.target.value)} /></div>
+            <div><Label>Costo materiali (€)</Label><Input type="number" value={materialCost} onChange={(e) => setMaterialCost(e.target.value)} /></div>
+            <Button onClick={() => productionMutation.mutate()} disabled={productionMutation.isPending}>
+              Aggiungi attività
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader><CardTitle className="text-lg">Attività registrate</CardTitle></CardHeader>
+          <CardContent>
+            {order.productionEntries?.length ? (
+              <ul className="space-y-2 text-sm">
+                {order.productionEntries.map((e) => (
+                  <li key={e.id} className="border-b pb-2">
+                    {e.hours}h · materiali {formatCurrency(e.materialCost)}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-sm text-muted-foreground">Nessuna attività registrata.</p>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </AppShell>
+  );
+}
