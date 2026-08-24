@@ -1,12 +1,12 @@
 # SideProjectors — Ready to publish
 
-Copy-paste this listing. Assets are in `docs/marketing/`.
+Copy-paste this listing. Assets are in `docs/marketing/` (English UI, latest version with i18n + dark mode).
 
 ## Live demo URL
 
-**https://oklahoma-gardens-tiger-advertising.trycloudflare.com**
+**https://dist-cause-tasks-country.trycloudflare.com/en**
 
-> Temporary tunnel (active while dev environment runs). For a permanent URL, deploy with [render.yaml](../../render.yaml) on Render free tier.
+> Temporary tunnel. Permanent deploy: [Render Blueprint](https://render.com/deploy?repo=https://github.com/notaxeltv/OpsHub&branch=cursor/opshub-saas-mvp-fd0a)
 
 **Login:** `demo@opshub.local` / `password123`
 
@@ -24,7 +24,7 @@ OpsHub — Multi-tenant B2B SaaS (CRM, Orders, Production, Inventory)
 
 OpsHub is a production-ready B2B SaaS MVP for small businesses (2–20 people) that manage customers, job orders, production, and inventory.
 
-**Live demo:** https://oklahoma-gardens-tiger-advertising.trycloudflare.com  
+**Live demo:** https://dist-cause-tasks-country.trycloudflare.com/en  
 **Demo login:** demo@opshub.local / password123
 
 **Features:**
@@ -35,6 +35,7 @@ OpsHub is a production-ready B2B SaaS MVP for small businesses (2–20 people) t
 - Dashboard KPIs, CSV margin export, PDF order reports
 - Multi-tenant orgs, JWT auth, refresh tokens, org switcher
 - Stripe subscription billing (checkout, webhooks, plan limits)
+- **5 languages** (EN/IT/FR/DE/ES) + light/dark mode + responsive mobile UI
 
 **Stack:** Next.js 15 · NestJS · Prisma · PostgreSQL · TanStack Query · Tailwind · Docker · GitHub Actions
 

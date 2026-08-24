@@ -1,24 +1,28 @@
 # OpsHub Marketing Assets
 
-Ready-to-publish assets for SideProjectors and other marketplaces.
+Ready-to-publish assets for SideProjectors and other marketplaces. **UI language: English (`/en`).**
 
 ## Live demo
 
 | Type | URL | Notes |
 |------|-----|-------|
-| **Temporary (cloud tunnel)** | https://oklahoma-gardens-tiger-advertising.trycloudflare.com | Active while the dev VM is running |
-| **Permanent deploy** | Use [Render Blueprint](../render.yaml) | One-click deploy on Render (free tier) |
+| **Temporary (cloud tunnel)** | https://dist-cause-tasks-country.trycloudflare.com/en | Active while dev VM runs |
+| **Permanent (Render)** | Deploy via [Blueprint](../../render.yaml) | See below |
 
 **Demo credentials**
 - Email: `demo@opshub.local`
 - Password: `password123`
 
-After deploying to Render, run the seed on the API service:
-```bash
-npx prisma db seed
-```
+### Deploy to Render (permanent)
 
-## Screenshots
+1. Open: https://render.com/deploy?repo=https://github.com/notaxeltv/OpsHub&branch=cursor/opshub-saas-mvp-fd0a
+2. Click **Deploy Blueprint** (creates PostgreSQL + API + Web)
+3. Wait ~10–15 min for first build
+4. Your demo URL will be: `https://opshub-web.onrender.com/en`
+
+Optional CI deploy: add GitHub secrets `RENDER_API_KEY`, `RENDER_SERVICE_ID_WEB`, `RENDER_SERVICE_ID_API` and run `.github/workflows/render-deploy.yml`.
+
+## Screenshots (English, latest UI)
 
 | File | Page |
 |------|------|
@@ -37,26 +41,21 @@ npx prisma db seed
 
 | File | Duration | Use |
 |------|----------|-----|
-| `video/demo-walkthrough.mp4` | ~21s | SideProjectors, social, listing embed |
-| `video/demo-walkthrough.webm` | ~21s | Web embed (smaller) |
+| `video/demo-walkthrough.mp4` | ~34s | SideProjectors, social, listing embed |
+| `video/demo-walkthrough.webm` | ~34s | Web embed |
 
-## Regenerate assets
+## Regenerate assets (English)
 
 ```bash
-# Start API + web locally
-npm run dev:api
-npm run dev:web
+npm run dev:api & npm run dev:web &
+npm run prisma:seed -w @opshub/api
 
-# Screenshots (1440×900)
-cd apps/web && npx playwright test --config=playwright.marketing.config.ts
+cd apps/web
+npm run marketing:screenshots
+npm run marketing:video
 
-# Demo video
-cd apps/web && npx playwright test --config=playwright.video.config.ts
 cp ../../docs/marketing/video-output/**/video.webm ../../docs/marketing/video/demo-walkthrough.webm
 ffmpeg -y -i ../../docs/marketing/video/demo-walkthrough.webm -c:v libx264 -pix_fmt yuv420p ../../docs/marketing/video/demo-walkthrough.mp4
 ```
 
-Optional public tunnel (temporary URL):
-```bash
-cloudflared tunnel --url http://localhost:3000
-```
+Uses locale `/en` and waits for real data before capturing.

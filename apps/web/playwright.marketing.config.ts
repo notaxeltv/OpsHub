@@ -5,7 +5,8 @@ export default defineConfig({
   testMatch: 'capture-marketing.ts',
   timeout: 120000,
   use: {
-    baseURL: process.env.MARKETING_BASE_URL ?? 'http://localhost:3000/en',
+    baseURL: process.env.MARKETING_BASE_URL ?? 'http://localhost:3000',
+    storageState: { cookies: [], origins: [] },
     ...devices['Desktop Chrome'],
     viewport: { width: 1440, height: 900 },
     video: {

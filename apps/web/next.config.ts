@@ -3,7 +3,11 @@ import createNextIntlPlugin from 'next-intl/plugin';
 
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
-const apiProxyTarget = process.env.API_PROXY_URL ?? 'http://localhost:3001';
+function normalizeProxyUrl(url: string) {
+  return url.startsWith('http') ? url : `http://${url}`;
+}
+
+const apiProxyTarget = normalizeProxyUrl(process.env.API_PROXY_URL ?? 'http://localhost:3001');
 
 const nextConfig: NextConfig = {
   output: 'standalone',

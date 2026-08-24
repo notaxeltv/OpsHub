@@ -88,7 +88,7 @@ Start at **$1,499** fixed price or **$1,200** auction with reserve.
 
 - [x] Public marketing landing at `/`
 - [x] Demo seed (`demo@opshub.local` / `password123`)
-- [x] **Live demo URL** — [temporary tunnel](https://oklahoma-gardens-tiger-advertising.trycloudflare.com) + [Render blueprint](../render.yaml) for permanent deploy
+- [x] **Live demo URL** — [tunnel](https://dist-cause-tasks-country.trycloudflare.com/en) + [Render blueprint](https://render.com/deploy?repo=https://github.com/notaxeltv/OpsHub&branch=cursor/opshub-saas-mvp-fd0a)
 - [x] **Screenshots** (10) in `docs/marketing/screenshots/`
 - [x] **Demo video** (~56s) in `docs/marketing/video/demo-walkthrough.mp4`
 - [ ] Stripe test mode on production demo (optional)

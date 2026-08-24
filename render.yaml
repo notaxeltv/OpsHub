@@ -1,5 +1,5 @@
 # Render Blueprint — OpsHub live demo
-# Deploy: https://render.com/deploy?repo=https://github.com/notaxeltv/OpsHub
+# Deploy: https://render.com/deploy?repo=https://github.com/notaxeltv/OpsHub&branch=cursor/opshub-saas-mvp-fd0a
 databases:
   - name: opshub-db
     plan: free
@@ -30,7 +30,8 @@ services:
           envVarKey: RENDER_EXTERNAL_URL
       - key: PORT
         value: 3001
-    postDeployCommand: npx prisma db seed
+      - key: NODE_ENV
+        value: production
 
   - type: web
     name: opshub-web
@@ -38,6 +39,7 @@ services:
     dockerfilePath: ./apps/web/Dockerfile
     dockerContext: .
     plan: free
+    healthCheckPath: /en
     envVars:
       - key: NEXT_PUBLIC_API_URL
         value: /api
@@ -46,3 +48,5 @@ services:
           name: opshub-api
           type: web
           property: hostport
+      - key: NODE_ENV
+        value: production

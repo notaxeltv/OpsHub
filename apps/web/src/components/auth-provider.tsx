@@ -1,10 +1,23 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter, usePathname } from '@/i18n/navigation';
+import { routing } from '@/i18n/routing';
 import { api, clearAuthSession, getStoredOrgId, setOrganizationId, Organization } from '@/lib/api';
 
-const PUBLIC_PATHS = ['/login', '/register'];
+const PUBLIC_SUFFIXES = ['', '/', '/login', '/register'];
+
+function isPublicPath(pathname: string) {
+  const segments = pathname.split('/').filter(Boolean);
+  const withoutLocale =
+    segments[0] && routing.locales.includes(segments[0] as (typeof routing.locales)[number])
+      ? '/' + segments.slice(1).join('/')
+      : pathname;
+  const normalized = withoutLocale === '' ? '/' : withoutLocale;
+  return PUBLIC_SUFFIXES.some(
+    (p) => normalized === p || (p !== '' && normalized.startsWith(`${p}/`)),
+  );
+}
 
 interface AuthState {
   user: { firstName: string; lastName: string; email: string } | null;
@@ -41,17 +54,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     } catch {
       clearAuthSession();
-      router.push('/login');
+      if (!isPublicPath(pathname)) {
+        router.push('/login');
+      }
     } finally {
       setLoading(false);
     }
-  }, [router]);
+  }, [router, pathname]);
 
   useEffect(() => {
-    if (PUBLIC_PATHS.some((p) => pathname.startsWith(p))) {
+    if (isPublicPath(pathname)) {
       setLoading(false);
       return;
     }
+    setLoading(true);
     refresh();
   }, [refresh, pathname]);
 

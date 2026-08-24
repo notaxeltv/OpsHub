@@ -1,0 +1,33 @@
+name: Deploy to Render
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'render.yaml'
+      - 'apps/**'
+      - 'package.json'
+
+jobs:
+  deploy:
+    if: ${{ secrets.RENDER_API_KEY != '' && secrets.RENDER_SERVICE_ID_WEB != '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Render CLI
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/render-oss/cli/refs/heads/main/bin/install.sh | sh
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Trigger web deploy
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          CI: true
+        run: render deploys create ${{ secrets.RENDER_SERVICE_ID_WEB }} --output json --confirm --wait
+
+      - name: Trigger API deploy
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          CI: true
+        run: render deploys create ${{ secrets.RENDER_SERVICE_ID_API }} --output json --confirm --wait

@@ -22,6 +22,11 @@ export default function middleware(request: NextRequest) {
   const token = request.cookies.get('opshub_token')?.value;
   const { locale, pathWithoutLocale } = getLocaleAndPath(pathname);
 
+  // Allow proxied API routes without auth (health checks, public endpoints)
+  if (pathWithoutLocale.startsWith('/api')) {
+    return intlMiddleware(request);
+  }
+
   const isPublic = PUBLIC_PATHS.some(
     (p) => pathWithoutLocale === p || (p !== '/' && pathWithoutLocale.startsWith(`${p}/`)),
   );
