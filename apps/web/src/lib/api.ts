@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? '/api';
 const ORG_KEY = 'opshub_org_id';
 const TOKEN_KEY = 'opshub_access_token';
 const REFRESH_KEY = 'opshub_refresh_token';

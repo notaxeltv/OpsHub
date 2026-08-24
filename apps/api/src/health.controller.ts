@@ -1,7 +1,9 @@
 import { Controller, Get } from '@nestjs/common';
+import { Public } from './common/decorators/auth.decorators';
 
 @Controller('health')
 export class HealthController {
+  @Public()
   @Get()
   check() {
     return { status: 'ok', service: 'opshub-api', timestamp: new Date().toISOString() };

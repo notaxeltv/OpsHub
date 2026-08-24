@@ -8,7 +8,9 @@
     "start": "next start -p 3000",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "marketing:screenshots": "playwright test --config=playwright.marketing.config.ts",
+    "marketing:video": "playwright test --config=playwright.video.config.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",

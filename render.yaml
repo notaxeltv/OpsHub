@@ -1,0 +1,48 @@
+# Render Blueprint — OpsHub live demo
+# Deploy: https://render.com/deploy?repo=https://github.com/notaxeltv/OpsHub
+databases:
+  - name: opshub-db
+    plan: free
+    databaseName: opshub
+    user: opshub
+
+services:
+  - type: web
+    name: opshub-api
+    runtime: docker
+    dockerfilePath: ./apps/api/Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: opshub-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: CORS_ORIGIN
+        fromService:
+          name: opshub-web
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: PORT
+        value: 3001
+    postDeployCommand: npx prisma db seed
+
+  - type: web
+    name: opshub-web
+    runtime: docker
+    dockerfilePath: ./apps/web/Dockerfile
+    dockerContext: .
+    plan: free
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        value: /api
+      - key: API_PROXY_URL
+        fromService:
+          name: opshub-api
+          type: web
+          property: hostport

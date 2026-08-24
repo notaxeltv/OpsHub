@@ -12,3 +12,5 @@ coverage
 apps/api/prisma/*.db
 apps/api/prisma/*.db-journal
 graphify-out/
+docs/marketing/playwright-output/
+docs/marketing/video-output/

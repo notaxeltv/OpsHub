@@ -43,6 +43,8 @@ npm run prisma:seed -w @opshub/api
 - Email: `demo@opshub.local`
 - Password: `password123`
 
+**Live demo:** https://oklahoma-gardens-tiger-advertising.trycloudflare.com
+
 ### Suggested price
 
 | Tier | Price | Notes |
@@ -86,11 +88,13 @@ Start at **$1,499** fixed price or **$1,200** auction with reserve.
 
 - [x] Public marketing landing at `/`
 - [x] Demo seed (`demo@opshub.local` / `password123`)
-- [ ] **Live demo URL** (Railway, Render, or VPS) — strongly recommended
-- [ ] **Screenshots** (6–8): landing, dashboard, customers, order detail, production, inventory, reports, settings/billing
-- [ ] **Short screen recording** (60–90s): login → dashboard → create order → production entry
-- [ ] Stripe test mode working on demo (optional but adds value)
+- [x] **Live demo URL** — [temporary tunnel](https://oklahoma-gardens-tiger-advertising.trycloudflare.com) + [Render blueprint](../render.yaml) for permanent deploy
+- [x] **Screenshots** (10) in `docs/marketing/screenshots/`
+- [x] **Demo video** (~56s) in `docs/marketing/video/demo-walkthrough.mp4`
+- [ ] Stripe test mode on production demo (optional)
 - [ ] GitHub repo access or zip delivery method decided
+
+See [docs/marketing/README.md](marketing/README.md) and [LISTING_COPY.md](marketing/LISTING_COPY.md) for publish-ready copy.
 
 ### Screenshot suggestions
 
