@@ -19,7 +19,7 @@ case "$MODE" in
     graphify cluster-only .
     ;;
   update)
-    graphify update . --code-only
+    graphify . --code-only
     graphify cluster-only .
     ;;
   query)
