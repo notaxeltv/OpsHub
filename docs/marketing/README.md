@@ -15,7 +15,7 @@ Ready-to-publish assets for SideProjectors and other marketplaces. **UI language
 
 ### Deploy to Render (permanent)
 
-1. Open: https://render.com/deploy?repo=https://github.com/notaxeltv/OpsHub&branch=cursor/opshub-saas-mvp-fd0a
+1. Open: https://render.com/deploy?repo=https://github.com/notaxeltv/OpsHub&branch=main
 2. Click **Deploy Blueprint** (creates PostgreSQL + API + Web)
 3. Wait ~10–15 min for first build
 4. Your demo URL will be: `https://opshub-web.onrender.com/en`

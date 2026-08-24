@@ -6,7 +6,7 @@ Copy-paste this listing. Assets are in `docs/marketing/` (English UI, latest ver
 
 **https://dist-cause-tasks-country.trycloudflare.com/en**
 
-> Temporary tunnel. Permanent deploy: [Render Blueprint](https://render.com/deploy?repo=https://github.com/notaxeltv/OpsHub&branch=cursor/opshub-saas-mvp-fd0a)
+> Temporary tunnel. Permanent deploy: [Render Blueprint](https://render.com/deploy?repo=https://github.com/notaxeltv/OpsHub&branch=main)
 
 **Login:** `demo@opshub.local` / `password123`
 

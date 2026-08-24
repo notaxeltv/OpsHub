@@ -1,5 +1,5 @@
 # Render Blueprint — OpsHub live demo
-# Deploy: https://render.com/deploy?repo=https://github.com/notaxeltv/OpsHub&branch=cursor/opshub-saas-mvp-fd0a
+# Deploy: https://render.com/deploy?repo=https://github.com/notaxeltv/OpsHub&branch=main
 databases:
   - name: opshub-db
     plan: free
