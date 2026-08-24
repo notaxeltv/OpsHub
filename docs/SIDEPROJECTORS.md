@@ -151,11 +151,10 @@ A: Proprietary by default — transfer full rights to buyer on sale (update `REA
 Priority backlog if you keep developing before/after listing:
 
 1. Live demo + privacy/terms pages
-2. English i18n for app UI
-3. Granular roles per module
-4. Email notifications (order status, low stock)
-5. Onboarding wizard for new orgs
-6. Mobile-responsive polish on complex tables
+2. Granular roles per module
+3. Email notifications (order status, low stock)
+4. Onboarding wizard for new orgs
+5. Mobile-responsive polish on complex tables
 
 ---
 
