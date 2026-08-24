@@ -73,6 +73,7 @@ npm run test:e2e -w @opshub/api      # e2e (richiede DB)
 - [ARCHITECTURE.md](ARCHITECTURE.md) — scelte tecniche e moduli
 - [DOMAIN.md](DOMAIN.md) — entità e flussi di dominio
 - [docs/GRAPHIFY.md](docs/GRAPHIFY.md) — integrazione Graphify
+- [docs/SIDEPROJECTORS.md](docs/SIDEPROJECTORS.md) — guida listing SideProjectors
 
 ## Aggiungere un nuovo modulo backend
 

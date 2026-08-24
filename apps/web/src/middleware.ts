@@ -6,7 +6,8 @@ const PUBLIC_PATHS = ['/login', '/register'];
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get('opshub_token')?.value;
-  const isPublic = PUBLIC_PATHS.some((p) => pathname.startsWith(p));
+  const isPublic =
+    pathname === '/' || PUBLIC_PATHS.some((p) => pathname.startsWith(p));
 
   if (!isPublic && !token) {
     const loginUrl = new URL('/login', request.url);
