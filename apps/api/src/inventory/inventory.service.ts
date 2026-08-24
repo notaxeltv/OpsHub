@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { MovementType } from '@prisma/client';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.module';
 import { TenantContext } from '../common/decorators/auth.decorators';
@@ -31,6 +32,23 @@ export class InventoryService {
     ]);
 
     return paginate(data, total, page, limit);
+  }
+
+  async getLowStockAlerts(tenant: TenantContext) {
+    const products = await this.prisma.product.findMany({
+      where: { organizationId: tenant.organizationId },
+    });
+
+    return products
+      .filter((p) => toNumber(p.currentStock) < toNumber(p.minStock))
+      .map((p) => ({
+        id: p.id,
+        name: p.name,
+        sku: p.sku,
+        currentStock: toNumber(p.currentStock),
+        minStock: toNumber(p.minStock),
+        unit: p.unit,
+      }));
   }
 
   async findProduct(tenant: TenantContext, id: string) {
@@ -76,9 +94,56 @@ export class InventoryService {
   }
 
   async createMovement(tenant: TenantContext, dto: CreateInventoryMovementDto) {
-    const product = await this.findProduct(tenant, dto.productId);
+    return this.deductOrAddStock(tenant.organizationId, {
+      productId: dto.productId,
+      type: dto.type,
+      quantity: dto.quantity,
+      reference: dto.reference,
+      orderId: dto.orderId,
+      productionEntryId: dto.productionEntryId,
+      notes: dto.notes,
+    });
+  }
+
+  async deductForProduction(
+    organizationId: string,
+    params: {
+      productId: string;
+      quantity: number;
+      orderId: string;
+      productionEntryId: string;
+    },
+  ) {
+    return this.deductOrAddStock(organizationId, {
+      productId: params.productId,
+      type: MovementType.OUT,
+      quantity: params.quantity,
+      orderId: params.orderId,
+      productionEntryId: params.productionEntryId,
+      reference: 'production',
+      notes: 'Scarico automatico da registrazione produzione',
+    });
+  }
+
+  private async deductOrAddStock(
+    organizationId: string,
+    params: {
+      productId: string;
+      type: MovementType;
+      quantity: number;
+      reference?: string;
+      orderId?: string;
+      productionEntryId?: string;
+      notes?: string;
+    },
+  ) {
+    const product = await this.prisma.product.findFirst({
+      where: { id: params.productId, organizationId },
+    });
+    if (!product) throw new NotFoundException('Product not found');
+
     const current = toNumber(product.currentStock);
-    const delta = dto.type === 'IN' ? dto.quantity : -dto.quantity;
+    const delta = params.type === MovementType.IN ? params.quantity : -params.quantity;
     const newStock = current + delta;
 
     if (newStock < 0) {
@@ -87,20 +152,20 @@ export class InventoryService {
 
     return this.prisma.$transaction(async (tx) => {
       await tx.product.update({
-        where: { id: dto.productId },
+        where: { id: params.productId },
         data: { currentStock: newStock },
       });
 
       return tx.inventoryMovement.create({
         data: {
-          organizationId: tenant.organizationId,
-          productId: dto.productId,
-          type: dto.type,
-          quantity: dto.quantity,
-          reference: dto.reference,
-          orderId: dto.orderId,
-          productionEntryId: dto.productionEntryId,
-          notes: dto.notes,
+          organizationId,
+          productId: params.productId,
+          type: params.type,
+          quantity: params.quantity,
+          reference: params.reference,
+          orderId: params.orderId,
+          productionEntryId: params.productionEntryId,
+          notes: params.notes,
         },
         include: { product: true },
       });

@@ -144,9 +144,26 @@ export const api = {
       '/auth/me',
     ),
   dashboard: () =>
-    apiFetch<{ kpis: Record<string, number>; topCustomers: Array<{ name: string; revenue: number; margin: number }> }>(
-      '/reports/dashboard',
-    ),
+    apiFetch<{
+      kpis: Record<string, number>;
+      topCustomers: Array<{ name: string; revenue: number; margin: number }>;
+      lowStockAlerts: Array<{ id: string; name: string; currentStock: number; minStock: number; unit: string }>;
+    }>('/reports/dashboard'),
+  billing: {
+    status: () =>
+      apiFetch<{
+        currentPlan: string;
+        limits: { maxCustomers: number | null; maxOrders: number | null };
+        usage: { customers: number; orders: number };
+        enabled: boolean;
+        upgradeablePlans: string[];
+      }>('/billing/status'),
+    checkout: (plan: string) =>
+      apiFetch<{ checkoutUrl: string | null; mock?: boolean; message?: string }>(
+        '/billing/checkout',
+        { method: 'POST', body: JSON.stringify({ plan }) },
+      ),
+  },
   customers: {
     list: (params?: { page?: number; limit?: number; search?: string; sortBy?: string; sortOrder?: string }) =>
       apiFetch<PaginatedResponse<{ id: string; name: string; email?: string; phone?: string }>>(

@@ -17,6 +17,13 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
   const queryClient = useQueryClient();
   const [hours, setHours] = useState('2');
   const [materialCost, setMaterialCost] = useState('0');
+  const [productId, setProductId] = useState('');
+  const [materialQuantity, setMaterialQuantity] = useState('');
+
+  const { data: products } = useQuery({
+    queryKey: ['inventory-products-select'],
+    queryFn: () => api.inventory.products({ limit: 100 }),
+  });
 
   const { data, isLoading } = useQuery({
     queryKey: ['order', id],
@@ -28,12 +35,16 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
       api.production.create({
         orderId: id,
         hours: parseFloat(hours),
-        materialCost: parseFloat(materialCost),
+        materialCost: materialCost ? parseFloat(materialCost) : undefined,
+        productId: productId || undefined,
+        materialQuantity: materialQuantity ? parseFloat(materialQuantity) : undefined,
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['order', id] });
       setHours('2');
       setMaterialCost('0');
+      setProductId('');
+      setMaterialQuantity('');
     },
   });
 
@@ -121,7 +132,23 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
           <CardHeader><CardTitle className="text-lg">Registra produzione</CardTitle></CardHeader>
           <CardContent className="space-y-4">
             <div><Label>Ore</Label><Input type="number" value={hours} onChange={(e) => setHours(e.target.value)} /></div>
-            <div><Label>Costo materiali (€)</Label><Input type="number" value={materialCost} onChange={(e) => setMaterialCost(e.target.value)} /></div>
+            <div>
+              <Label>Materiale (scarico magazzino)</Label>
+              <select
+                className="flex h-10 w-full rounded-md border px-3 text-sm"
+                value={productId}
+                onChange={(e) => setProductId(e.target.value)}
+              >
+                <option value="">Nessuno</option>
+                {products?.data.map((p) => (
+                  <option key={p.id} value={p.id}>{p.name} (scorta: {p.currentStock})</option>
+                ))}
+              </select>
+            </div>
+            {productId && (
+              <div><Label>Quantità materiale</Label><Input type="number" step="0.001" value={materialQuantity} onChange={(e) => setMaterialQuantity(e.target.value)} /></div>
+            )}
+            <div><Label>Costo materiali manuali (€)</Label><Input type="number" value={materialCost} onChange={(e) => setMaterialCost(e.target.value)} placeholder="Opzionale se materiale selezionato" /></div>
             <Button onClick={() => productionMutation.mutate()} disabled={productionMutation.isPending}>
               Aggiungi attività
             </Button>

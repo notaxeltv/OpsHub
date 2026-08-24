@@ -1,5 +1,7 @@
 # Customers Module
 
-CRM leggero: anagrafica clienti con ricerca.
+CRM leggero: anagrafica clienti con ricerca, paginazione e contatti.
 
-**Endpoints:** CRUD `/customers`
+**Endpoints:**
+- CRUD `/customers` (paginato: `?page=&limit=&search=&sortBy=&sortOrder=`)
+- CRUD `/customers/:id/contacts`

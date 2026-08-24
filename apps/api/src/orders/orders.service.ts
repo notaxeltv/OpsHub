@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.module';
 import { TenantContext } from '../common/decorators/auth.decorators';
+import { BillingService } from '../billing/billing.service';
 import { CreateOrderDto, UpdateOrderDto } from './dto/order.dto';
 import { OrdersQueryDto } from './dto/orders-query.dto';
 import { calculateOrderMargin } from '../common/services/margin.service';
@@ -16,7 +17,10 @@ const orderInclude = {
 
 @Injectable()
 export class OrdersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private billingService: BillingService,
+  ) {}
 
   async findAll(tenant: TenantContext, query: OrdersQueryDto) {
     const page = query.page ?? 1;
@@ -75,6 +79,7 @@ export class OrdersService {
   }
 
   async create(tenant: TenantContext, dto: CreateOrderDto) {
+    await this.billingService.assertWithinPlanLimits(tenant.organizationId, 'orders');
     const { items, ...data } = dto;
     return this.prisma.order.create({
       data: {

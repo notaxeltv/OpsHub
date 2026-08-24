@@ -15,6 +15,15 @@ export class CreateProductionEntryDto {
   materialCost?: number;
 
   @IsOptional()
+  @IsString()
+  productId?: string;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0.001)
+  materialQuantity?: number;
+
+  @IsOptional()
   @IsNumber()
   @Min(0)
   hourlyCost?: number;

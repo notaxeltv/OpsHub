@@ -49,4 +49,9 @@ export class InventoryController {
   createMovement(@Tenant() tenant: TenantContext, @Body() dto: CreateInventoryMovementDto) {
     return this.inventoryService.createMovement(tenant, dto);
   }
+
+  @Get('alerts/low-stock')
+  lowStockAlerts(@Tenant() tenant: TenantContext) {
+    return this.inventoryService.getLowStockAlerts(tenant);
+  }
 }

@@ -2,10 +2,15 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.module';
 import { TenantContext } from '../common/decorators/auth.decorators';
 import { CreateProductionEntryDto, UpdateProductionEntryDto } from './dto/production.dto';
+import { InventoryService } from '../inventory/inventory.service';
+import { toNumber } from '../common/utils/numbers';
 
 @Injectable()
 export class ProductionService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private inventoryService: InventoryService,
+  ) {}
 
   findAll(tenant: TenantContext, orderId?: string) {
     return this.prisma.productionEntry.findMany({
@@ -13,7 +18,7 @@ export class ProductionService {
         organizationId: tenant.organizationId,
         ...(orderId ? { orderId } : {}),
       },
-      include: { order: { include: { customer: true } } },
+      include: { order: { include: { customer: true } }, product: true },
       orderBy: { date: 'desc' },
     });
   }
@@ -21,7 +26,7 @@ export class ProductionService {
   async findOne(tenant: TenantContext, id: string) {
     const entry = await this.prisma.productionEntry.findFirst({
       where: { id, organizationId: tenant.organizationId },
-      include: { order: true },
+      include: { order: true, product: true },
     });
     if (!entry) throw new NotFoundException('Production entry not found');
     return entry;
@@ -33,18 +38,40 @@ export class ProductionService {
     });
     if (!order) throw new NotFoundException('Order not found');
 
-    return this.prisma.productionEntry.create({
+    let materialCost = dto.materialCost ?? 0;
+
+    if (dto.productId && dto.materialQuantity) {
+      const product = await this.inventoryService.findProduct(tenant, dto.productId);
+      if (!materialCost) {
+        materialCost = toNumber(product.unitCost) * dto.materialQuantity;
+      }
+    }
+
+    const entry = await this.prisma.productionEntry.create({
       data: {
         organizationId: tenant.organizationId,
         orderId: dto.orderId,
         hours: dto.hours ?? 0,
-        materialCost: dto.materialCost ?? 0,
+        materialCost,
+        productId: dto.productId,
+        materialQuantity: dto.materialQuantity,
         hourlyCost: dto.hourlyCost,
         notes: dto.notes,
         date: dto.date ? new Date(dto.date) : undefined,
       },
-      include: { order: true },
+      include: { order: true, product: true },
     });
+
+    if (dto.productId && dto.materialQuantity) {
+      await this.inventoryService.deductForProduction(tenant.organizationId, {
+        productId: dto.productId,
+        quantity: dto.materialQuantity,
+        orderId: dto.orderId,
+        productionEntryId: entry.id,
+      });
+    }
+
+    return entry;
   }
 
   async update(tenant: TenantContext, id: string, dto: UpdateProductionEntryDto) {
@@ -58,7 +85,7 @@ export class ProductionService {
         notes: dto.notes,
         date: dto.date ? new Date(dto.date) : undefined,
       },
-      include: { order: true },
+      include: { order: true, product: true },
     });
   }
 

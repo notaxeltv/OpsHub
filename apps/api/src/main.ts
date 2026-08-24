@@ -2,13 +2,14 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import cookieParser from 'cookie-parser';
+import * as Sentry from '@sentry/node';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { rawBody: true });
 
   const configService = app.get(ConfigService);
   const port = configService.get<number>('PORT', 3001);
@@ -16,9 +17,12 @@ async function bootstrap() {
   const sentryDsn = configService.get<string>('SENTRY_DSN');
 
   if (sentryDsn) {
-  // TODO: initialize @sentry/node when dependency is added
-  // Sentry.init({ dsn: sentryDsn, environment: configService.get('NODE_ENV') });
-    logger.log('Sentry DSN configured — integration pending');
+    Sentry.init({
+      dsn: sentryDsn,
+      environment: configService.get<string>('NODE_ENV', 'development'),
+      tracesSampleRate: 0.1,
+    });
+    logger.log('Sentry initialized');
   }
 
   app.use(cookieParser());

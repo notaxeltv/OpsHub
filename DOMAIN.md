@@ -77,9 +77,9 @@ Report margini ← per commessa, per cliente
 3. Movimento OUT non consentito se scorta insufficiente
 4. Riferimento ordine univoco per organizzazione `(organizationId, reference)`
 
-## TODO futuri
+## Funzionalità avanzate
 
-- [ ] Integrazione Stripe per subscription
-- [ ] Auto-deduzione magazzino da production entries
-- [ ] Notifiche scorte minime
-- [ ] Ruoli granulari per modulo
+- [x] Integrazione Stripe per subscription (checkout + webhook)
+- [x] Auto-deduzione magazzino da production entries
+- [x] Notifiche scorte minime (dashboard + API `/inventory/alerts/low-stock`)
+- [ ] Ruoli granulari per modulo (futuro)

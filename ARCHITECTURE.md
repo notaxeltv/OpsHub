@@ -61,7 +61,7 @@ opshub/
                             │
                             ▼
                     ┌──────────────┐
-                    │   Billing    │  (TODO: Stripe)
+                    │   Billing    │  Stripe checkout + webhook
                     └──────────────┘
 ```
 

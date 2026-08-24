@@ -1,7 +1,10 @@
 # Inventory Module
 
-Anagrafica materiali e movimenti magazzino IN/OUT.
+Anagrafica materiali, movimenti magazzino IN/OUT, alert scorte minime.
 
-**Endpoints:** `/inventory/products`, `/inventory/movements`
+**Endpoints:**
+- `/inventory/products` (paginato)
+- `/inventory/movements`
+- `GET /inventory/alerts/low-stock`
 
-TODO: auto-deduzione scorte da production entries.
+Lo scarico automatico avviene quando una `ProductionEntry` include `productId` + `materialQuantity`.

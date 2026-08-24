@@ -98,8 +98,10 @@ npm run test:e2e -w @opshub/api      # e2e (richiede DB)
 - ✅ Export CSV margini, PDF commessa
 - ✅ Seed dati demo (`npm run prisma:seed -w @opshub/api`)
 - ✅ Test e2e API + Playwright frontend (auth)
-- 🔲 Subscription Stripe (struttura pronta, TODO)
-- 🔲 Magazzino: auto-scarico da produzione (TODO)
+- ✅ Subscription Stripe (checkout, webhook, enforcement piani)
+- ✅ Magazzino: auto-scarico da produzione + alert scorte minime
+- ✅ Sentry integrato (con `SENTRY_DSN`)
+- ✅ Deploy: push immagini su GHCR
 
 ## Licenza
 

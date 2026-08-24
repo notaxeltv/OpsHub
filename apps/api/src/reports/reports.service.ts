@@ -15,7 +15,7 @@ export class ReportsService {
     const now = new Date();
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
 
-    const [orders, openOrders, customers, org] = await Promise.all([
+    const [orders, openOrders, customers, org, lowStockProducts] = await Promise.all([
       this.prisma.order.findMany({
         where: { organizationId: orgId },
         include: { items: true, productionEntries: true, customer: true },
@@ -28,6 +28,7 @@ export class ReportsService {
       }),
       this.prisma.customer.count({ where: { organizationId: orgId } }),
       this.prisma.organization.findUnique({ where: { id: orgId } }),
+      this.prisma.product.findMany({ where: { organizationId: orgId } }),
     ]);
 
     const defaultRate = org ? toNumber(org.defaultHourlyRate) : 35;
@@ -51,6 +52,16 @@ export class ReportsService {
 
     const topCustomers = this.aggregateByCustomer(orderMargins);
 
+    const lowStockAlerts = lowStockProducts
+      .filter((p) => toNumber(p.currentStock) < toNumber(p.minStock))
+      .map((p) => ({
+        id: p.id,
+        name: p.name,
+        currentStock: toNumber(p.currentStock),
+        minStock: toNumber(p.minStock),
+        unit: p.unit,
+      }));
+
     return {
       kpis: {
         totalRevenue: roundCurrency(totalRevenue),
@@ -58,10 +69,12 @@ export class ReportsService {
         monthRevenue: roundCurrency(monthRevenue),
         openOrders,
         totalCustomers: customers,
+        lowStockCount: lowStockAlerts.length,
         averageMarginPercent:
           totalRevenue > 0 ? roundCurrency((totalMargin / totalRevenue) * 100) : 0,
       },
       topCustomers: topCustomers.slice(0, 5),
+      lowStockAlerts: lowStockAlerts.slice(0, 5),
     };
   }
 

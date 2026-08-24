@@ -2,13 +2,17 @@ import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/commo
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.module';
 import { TenantContext } from '../common/decorators/auth.decorators';
+import { BillingService } from '../billing/billing.service';
 import { CreateCustomerDto, UpdateCustomerDto } from './dto/customer.dto';
 import { CreateContactDto, UpdateContactDto } from './dto/contact.dto';
 import { PaginationQueryDto, paginate } from '../common/dto/pagination.dto';
 
 @Injectable()
 export class CustomersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private billingService: BillingService,
+  ) {}
 
   async findAll(tenant: TenantContext, query: PaginationQueryDto) {
     const page = query.page ?? 1;
@@ -50,7 +54,8 @@ export class CustomersService {
     return customer;
   }
 
-  create(tenant: TenantContext, dto: CreateCustomerDto) {
+  async create(tenant: TenantContext, dto: CreateCustomerDto) {
+    await this.billingService.assertWithinPlanLimits(tenant.organizationId, 'customers');
     return this.prisma.customer.create({
       data: { ...dto, organizationId: tenant.organizationId },
     });

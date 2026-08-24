@@ -24,12 +24,30 @@ export default function DashboardPage() {
         <p className="text-muted-foreground">Panoramica operativa del tuo business</p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
         <KpiCard title="Fatturato mese" value={formatCurrency(kpis?.monthRevenue ?? 0)} />
         <KpiCard title="Margine totale" value={formatCurrency(kpis?.totalMargin ?? 0)} />
         <KpiCard title="Commesse aperte" value={String(kpis?.openOrders ?? 0)} />
         <KpiCard title="Clienti" value={String(kpis?.totalCustomers ?? 0)} />
+        <KpiCard title="Scorte basse" value={String(kpis?.lowStockCount ?? 0)} />
       </div>
+
+      {data?.lowStockAlerts && data.lowStockAlerts.length > 0 && (
+        <Card className="mt-6 border-amber-200 bg-amber-50/50">
+          <CardHeader>
+            <CardTitle className="text-lg text-amber-800">Alert scorte minime</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul className="space-y-2 text-sm">
+              {data.lowStockAlerts.map((p) => (
+                <li key={p.id}>
+                  <strong>{p.name}</strong>: {p.currentStock} {p.unit} (min {p.minStock})
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+      )}
 
       <Card className="mt-8">
         <CardHeader>
