@@ -1,17 +1,39 @@
 'use client';
 
-import { use } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { use, useState } from 'react';
 import Link from 'next/link';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useForm } from 'react-hook-form';
 import { AppShell } from '@/components/layout/app-shell';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { api } from '@/lib/api';
 
 export default function CustomerDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
+  const queryClient = useQueryClient();
+  const { register, handleSubmit, reset } = useForm({
+    defaultValues: { name: '', email: '', phone: '', role: '' },
+  });
+
   const { data, isLoading } = useQuery({
     queryKey: ['customer', id],
     queryFn: () => api.customers.get(id),
+  });
+
+  const contactMutation = useMutation({
+    mutationFn: (form: Record<string, string>) => api.customers.createContact(id, form),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['customer', id] });
+      reset();
+    },
+  });
+
+  const deleteContactMutation = useMutation({
+    mutationFn: (contactId: string) => api.customers.deleteContact(id, contactId),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['customer', id] }),
   });
 
   if (isLoading) return <AppShell><p>Caricamento...</p></AppShell>;
@@ -22,6 +44,7 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
     phone?: string;
     vatNumber?: string;
     notes?: string;
+    contacts?: Array<{ id: string; name: string; email?: string; phone?: string; role?: string; isPrimary: boolean }>;
     orders?: Array<{ id: string; reference: string; title: string; status: string }>;
   };
 
@@ -59,6 +82,57 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
             ) : (
               <p className="text-sm text-muted-foreground">Nessuna commessa.</p>
             )}
+          </CardContent>
+        </Card>
+
+        <Card className="lg:col-span-2">
+          <CardHeader><CardTitle className="text-lg">Contatti</CardTitle></CardHeader>
+          <CardContent>
+            {customer?.contacts?.length ? (
+              <table className="mb-6 w-full text-sm">
+                <thead>
+                  <tr className="border-b text-left text-muted-foreground">
+                    <th className="pb-2">Nome</th>
+                    <th className="pb-2">Email</th>
+                    <th className="pb-2">Ruolo</th>
+                    <th className="pb-2"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {customer.contacts.map((c) => (
+                    <tr key={c.id} className="border-b">
+                      <td className="py-2">{c.name}{c.isPrimary && ' ★'}</td>
+                      <td className="py-2">{c.email ?? '—'}</td>
+                      <td className="py-2">{c.role ?? '—'}</td>
+                      <td className="py-2 text-right">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => deleteContactMutation.mutate(c.id)}
+                        >
+                          Elimina
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <p className="mb-4 text-sm text-muted-foreground">Nessun contatto.</p>
+            )}
+
+            <form
+              onSubmit={handleSubmit((d) => contactMutation.mutate(d))}
+              className="grid gap-3 sm:grid-cols-2"
+            >
+              <div><Label>Nome</Label><Input {...register('name', { required: true })} /></div>
+              <div><Label>Email</Label><Input type="email" {...register('email')} /></div>
+              <div><Label>Telefono</Label><Input {...register('phone')} /></div>
+              <div><Label>Ruolo</Label><Input {...register('role')} /></div>
+              <div className="sm:col-span-2">
+                <Button type="submit" disabled={contactMutation.isPending}>Aggiungi contatto</Button>
+              </div>
+            </form>
           </CardContent>
         </Card>
       </div>

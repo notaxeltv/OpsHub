@@ -2,14 +2,15 @@ import { Controller, Get, Post, Patch, Delete, Body, Param, Query } from '@nestj
 import { OrdersService } from './orders.service';
 import { Tenant, TenantContext } from '../common/decorators/auth.decorators';
 import { CreateOrderDto, UpdateOrderDto } from './dto/order.dto';
+import { OrdersQueryDto } from './dto/orders-query.dto';
 
 @Controller('orders')
 export class OrdersController {
   constructor(private ordersService: OrdersService) {}
 
   @Get()
-  findAll(@Tenant() tenant: TenantContext, @Query('status') status?: string) {
-    return this.ordersService.findAll(tenant, status);
+  findAll(@Tenant() tenant: TenantContext, @Query() query: OrdersQueryDto) {
+    return this.ordersService.findAll(tenant, query);
   }
 
   @Get(':id')

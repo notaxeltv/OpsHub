@@ -86,14 +86,20 @@ npm run test:e2e -w @opshub/api      # e2e (richiede DB)
 ## MVP funzionante
 
 - ✅ Registrazione + creazione organizzazione
-- ✅ CRUD clienti
-- ✅ CRUD commesse con righe
+- ✅ Auth middleware frontend + refresh token automatico
+- ✅ Organization switcher nell'header
+- ✅ CRUD clienti con paginazione e ricerca
+- ✅ CRUD contatti per cliente
+- ✅ CRUD commesse con righe, modifica e cambio stato
 - ✅ Registrazione ore/materiali (produzione)
+- ✅ Pagina magazzino (materiali + movimenti)
 - ✅ Calcolo margini per commessa
 - ✅ Dashboard KPI
 - ✅ Export CSV margini, PDF commessa
+- ✅ Seed dati demo (`npm run prisma:seed -w @opshub/api`)
+- ✅ Test e2e API + Playwright frontend (auth)
 - 🔲 Subscription Stripe (struttura pronta, TODO)
-- 🔲 Magazzino avanzato (CRUD base, TODO integrazione produzione)
+- 🔲 Magazzino: auto-scarico da produzione (TODO)
 
 ## Licenza
 

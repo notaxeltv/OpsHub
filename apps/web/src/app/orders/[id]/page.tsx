@@ -37,6 +37,11 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
     },
   });
 
+  const statusMutation = useMutation({
+    mutationFn: (status: string) => api.orders.update(id, { status }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['order', id] }),
+  });
+
   if (isLoading) return <AppShell><p>Caricamento...</p></AppShell>;
 
   const order = data as {
@@ -53,9 +58,19 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
     <AppShell>
       <div className="mb-6">
         <Link href="/orders" className="text-sm text-primary hover:underline">← Commesse</Link>
-        <div className="mt-2 flex items-center gap-3">
+        <div className="mt-2 flex flex-wrap items-center gap-3">
           <h2 className="text-3xl font-bold">{order.reference}</h2>
           <StatusBadge status={order.status} />
+          <select
+            className="rounded-md border px-2 py-1 text-sm"
+            value={order.status}
+            onChange={(e) => statusMutation.mutate(e.target.value)}
+          >
+            {['DRAFT', 'CONFIRMED', 'IN_PROGRESS', 'COMPLETED', 'INVOICED'].map((s) => (
+              <option key={s} value={s}>{s.replace('_', ' ')}</option>
+            ))}
+          </select>
+          <Link href={`/orders/${id}/edit`} className="text-sm text-primary hover:underline">Modifica</Link>
         </div>
         <p className="text-muted-foreground">{order.title} · {order.customer.name}</p>
       </div>

@@ -9,6 +9,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { PartialType } from '@nestjs/mapped-types';
 import { OrderStatus } from '@prisma/client';
 
 export class OrderItemDto {
@@ -71,4 +72,4 @@ export class CreateOrderDto {
   items?: OrderItemDto[];
 }
 
-export class UpdateOrderDto extends CreateOrderDto {}
+export class UpdateOrderDto extends PartialType(CreateOrderDto) {}

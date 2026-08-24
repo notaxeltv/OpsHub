@@ -28,7 +28,10 @@ type FormData = z.infer<typeof schema>;
 
 export default function NewOrderPage() {
   const router = useRouter();
-  const { data: customers } = useQuery({ queryKey: ['customers'], queryFn: () => api.customers.list() });
+  const { data: customers } = useQuery({
+    queryKey: ['customers-all'],
+    queryFn: () => api.customers.list({ limit: 100 }),
+  });
   const { register, handleSubmit, control } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: { items: [{ description: '', quantity: 1, unitPrice: 0 }] },
@@ -50,7 +53,7 @@ export default function NewOrderPage() {
               <Label>Cliente</Label>
               <select className="flex h-10 w-full rounded-md border px-3 text-sm" {...register('customerId')}>
                 <option value="">Seleziona...</option>
-                {customers?.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+                {customers?.data.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
               </select>
             </div>
             <div><Label>Riferimento</Label><Input {...register('reference')} placeholder="COMM-2024-001" /></div>

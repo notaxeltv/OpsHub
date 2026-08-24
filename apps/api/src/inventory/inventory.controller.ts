@@ -6,14 +6,15 @@ import {
   CreateProductDto,
   UpdateProductDto,
 } from './dto/inventory.dto';
+import { PaginationQueryDto } from '../common/dto/pagination.dto';
 
 @Controller('inventory')
 export class InventoryController {
   constructor(private inventoryService: InventoryService) {}
 
   @Get('products')
-  listProducts(@Tenant() tenant: TenantContext) {
-    return this.inventoryService.findAllProducts(tenant);
+  listProducts(@Tenant() tenant: TenantContext, @Query() query: PaginationQueryDto) {
+    return this.inventoryService.findAllProducts(tenant, query);
   }
 
   @Get('products/:id')
@@ -36,8 +37,12 @@ export class InventoryController {
   }
 
   @Get('movements')
-  listMovements(@Tenant() tenant: TenantContext, @Query('productId') productId?: string) {
-    return this.inventoryService.findMovements(tenant, productId);
+  listMovements(
+    @Tenant() tenant: TenantContext,
+    @Query() query: PaginationQueryDto,
+    @Query('productId') productId?: string,
+  ) {
+    return this.inventoryService.findMovements(tenant, query, productId);
   }
 
   @Post('movements')

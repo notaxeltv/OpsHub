@@ -13,6 +13,13 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const port = configService.get<number>('PORT', 3001);
   const corsOrigin = configService.get<string>('CORS_ORIGIN', 'http://localhost:3000');
+  const sentryDsn = configService.get<string>('SENTRY_DSN');
+
+  if (sentryDsn) {
+  // TODO: initialize @sentry/node when dependency is added
+  // Sentry.init({ dsn: sentryDsn, environment: configService.get('NODE_ENV') });
+    logger.log('Sentry DSN configured — integration pending');
+  }
 
   app.use(cookieParser());
   app.enableCors({

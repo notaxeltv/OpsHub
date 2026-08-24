@@ -1,9 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.module';
 import { TenantContext } from '../common/decorators/auth.decorators';
 import { CreateOrderDto, UpdateOrderDto } from './dto/order.dto';
+import { OrdersQueryDto } from './dto/orders-query.dto';
 import { calculateOrderMargin } from '../common/services/margin.service';
 import { toNumber } from '../common/utils/numbers';
+import { paginate } from '../common/dto/pagination.dto';
 
 const orderInclude = {
   customer: true,
@@ -15,15 +18,38 @@ const orderInclude = {
 export class OrdersService {
   constructor(private prisma: PrismaService) {}
 
-  findAll(tenant: TenantContext, status?: string) {
-    return this.prisma.order.findMany({
-      where: {
-        organizationId: tenant.organizationId,
-        ...(status ? { status: status as never } : {}),
-      },
-      include: { customer: true, items: true },
-      orderBy: { createdAt: 'desc' },
-    });
+  async findAll(tenant: TenantContext, query: OrdersQueryDto) {
+    const page = query.page ?? 1;
+    const limit = query.limit ?? 20;
+    const sortBy = query.sortBy === 'reference' ? 'reference' : 'createdAt';
+    const sortOrder = query.sortOrder ?? 'desc';
+
+    const where: Prisma.OrderWhereInput = {
+      organizationId: tenant.organizationId,
+      ...(query.status ? { status: query.status } : {}),
+      ...(query.search
+        ? {
+            OR: [
+              { reference: { contains: query.search, mode: 'insensitive' } },
+              { title: { contains: query.search, mode: 'insensitive' } },
+              { customer: { name: { contains: query.search, mode: 'insensitive' } } },
+            ],
+          }
+        : {}),
+    };
+
+    const [data, total] = await Promise.all([
+      this.prisma.order.findMany({
+        where,
+        include: { customer: true, items: true },
+        orderBy: { [sortBy]: sortOrder },
+        skip: (page - 1) * limit,
+        take: limit,
+      }),
+      this.prisma.order.count({ where }),
+    ]);
+
+    return paginate(data, total, page, limit);
   }
 
   async findOne(tenant: TenantContext, id: string) {
