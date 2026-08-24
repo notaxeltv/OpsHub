@@ -4,9 +4,9 @@ Copy-paste this listing. Assets are in `docs/marketing/` (English UI, latest ver
 
 ## Live demo URL
 
-**https://dist-cause-tasks-country.trycloudflare.com/en**
+**https://opshub-web.onrender.com/en** (after [Render Blueprint](https://render.com/deploy?repo=https://github.com/notaxeltv/OpsHub&branch=main) deploy)
 
-> Temporary tunnel. Permanent deploy: [Render Blueprint](https://render.com/deploy?repo=https://github.com/notaxeltv/OpsHub&branch=main)
+> Or run locally: `docker compose up --build` → http://localhost:3000/en
 
 **Login:** `demo@opshub.local` / `password123`
 
@@ -24,7 +24,7 @@ OpsHub — Multi-tenant B2B SaaS (CRM, Orders, Production, Inventory)
 
 OpsHub is a production-ready B2B SaaS MVP for small businesses (2–20 people) that manage customers, job orders, production, and inventory.
 
-**Live demo:** https://dist-cause-tasks-country.trycloudflare.com/en  
+**Live demo:** https://opshub-web.onrender.com/en (or deploy via Render Blueprint in README)  
 **Demo login:** demo@opshub.local / password123
 
 **Features:**

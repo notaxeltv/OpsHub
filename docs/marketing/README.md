@@ -6,8 +6,8 @@ Ready-to-publish assets for SideProjectors and other marketplaces. **UI language
 
 | Type | URL | Notes |
 |------|-----|-------|
-| **Temporary (cloud tunnel)** | https://dist-cause-tasks-country.trycloudflare.com/en | Active while dev VM runs |
-| **Permanent (Render)** | Deploy via [Blueprint](../../render.yaml) | See below |
+| **Render (recommended)** | https://opshub-web.onrender.com/en | Deploy via [Blueprint](../../render.yaml) |
+| **Local** | http://localhost:3000/en | `docker compose up --build` |
 
 **Demo credentials**
 - Email: `demo@opshub.local`

@@ -43,7 +43,7 @@ npm run prisma:seed -w @opshub/api
 - Email: `demo@opshub.local`
 - Password: `password123`
 
-**Live demo:** https://oklahoma-gardens-tiger-advertising.trycloudflare.com
+**Live demo:** Deploy via [Render Blueprint](https://render.com/deploy?repo=https://github.com/notaxeltv/OpsHub&branch=main) → `https://opshub-web.onrender.com/en` (or run locally with `docker compose up --build`)
 
 ### Suggested price
 
@@ -88,7 +88,7 @@ Start at **$1,499** fixed price or **$1,200** auction with reserve.
 
 - [x] Public marketing landing at `/`
 - [x] Demo seed (`demo@opshub.local` / `password123`)
-- [x] **Live demo URL** — [tunnel](https://dist-cause-tasks-country.trycloudflare.com/en) + [Render blueprint](https://render.com/deploy?repo=https://github.com/notaxeltv/OpsHub&branch=main)
+- [x] **Live demo URL** — [Render blueprint](https://render.com/deploy?repo=https://github.com/notaxeltv/OpsHub&branch=main) (`https://opshub-web.onrender.com/en`) or local Docker
 - [x] **Screenshots** (10) in `docs/marketing/screenshots/`
 - [x] **Demo video** (~56s) in `docs/marketing/video/demo-walkthrough.mp4`
 - [ ] Stripe test mode on production demo (optional)
@@ -165,4 +165,4 @@ Priority backlog if you keep developing before/after listing:
 ## Links
 
 - Repo: https://github.com/notaxeltv/OpsHub
-- PR / branch: `cursor/opshub-saas-mvp-fd0a`
+- Branch: `main`
