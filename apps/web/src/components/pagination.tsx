@@ -11,7 +11,7 @@ export function Pagination({ page, totalPages, onPageChange }: PaginationProps) 
 
   return (
     <div className="mt-4 flex items-center justify-between text-sm">
-      <span className="text-muted-foreground">Pagina {page} di {totalPages}</span>
+      <span className="text-muted-foreground">Page {page} of {totalPages}</span>
       <div className="flex gap-2">
         <button
           type="button"
@@ -19,7 +19,7 @@ export function Pagination({ page, totalPages, onPageChange }: PaginationProps) 
           onClick={() => onPageChange(page - 1)}
           className="rounded border px-3 py-1 disabled:opacity-50"
         >
-          Precedente
+          Previous
         </button>
         <button
           type="button"
@@ -27,7 +27,7 @@ export function Pagination({ page, totalPages, onPageChange }: PaginationProps) 
           onClick={() => onPageChange(page + 1)}
           className="rounded border px-3 py-1 disabled:opacity-50"
         >
-          Successiva
+          Next
         </button>
       </div>
     </div>

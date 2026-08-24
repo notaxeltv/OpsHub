@@ -32,18 +32,18 @@ export default function OrdersPage() {
     <AppShell>
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold">Commesse</h2>
-          <p className="text-muted-foreground">Gestisci ordini e progetti</p>
+          <h2 className="text-3xl font-bold">Orders</h2>
+          <p className="text-muted-foreground">Manage job orders and projects</p>
         </div>
-        <Button asChild><Link href="/orders/new">Nuova commessa</Link></Button>
+        <Button asChild><Link href="/orders/new">New order</Link></Button>
       </div>
 
       <Card>
         <CardHeader className="flex flex-row flex-wrap items-center justify-between gap-4">
-          <CardTitle className="text-lg">Lista commesse</CardTitle>
+          <CardTitle className="text-lg">Order list</CardTitle>
           <div className="flex gap-2">
             <Input
-              placeholder="Cerca..."
+              placeholder="Search..."
               value={search}
               onChange={(e) => { setSearch(e.target.value); setPage(1); }}
               className="w-40"
@@ -54,23 +54,23 @@ export default function OrdersPage() {
               onChange={(e) => { setStatus(e.target.value); setPage(1); }}
             >
               {STATUSES.map((s) => (
-                <option key={s} value={s}>{s || 'Tutti gli stati'}</option>
+                <option key={s} value={s}>{s || 'All statuses'}</option>
               ))}
             </select>
           </div>
         </CardHeader>
         <CardContent>
           {isLoading ? (
-            <p>Caricamento...</p>
+            <p>Loading...</p>
           ) : (
             <>
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b text-left text-muted-foreground">
-                    <th className="pb-2">Riferimento</th>
-                    <th className="pb-2">Titolo</th>
-                    <th className="pb-2">Cliente</th>
-                    <th className="pb-2">Stato</th>
+                    <th className="pb-2">Reference</th>
+                    <th className="pb-2">Title</th>
+                    <th className="pb-2">Customer</th>
+                    <th className="pb-2">Status</th>
                     <th className="pb-2"></th>
                   </tr>
                 </thead>
@@ -82,7 +82,7 @@ export default function OrdersPage() {
                       <td className="py-3">{o.customer.name}</td>
                       <td className="py-3"><StatusBadge status={o.status} /></td>
                       <td className="py-3 text-right">
-                        <Link href={`/orders/${o.id}`} className="text-primary hover:underline">Dettaglio</Link>
+                        <Link href={`/orders/${o.id}`} className="text-primary hover:underline">Details</Link>
                       </td>
                     </tr>
                   ))}

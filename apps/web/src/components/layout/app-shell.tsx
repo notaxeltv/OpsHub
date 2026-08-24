@@ -19,12 +19,12 @@ import { Button } from '@/components/ui/button';
 
 const nav = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/customers', label: 'Clienti', icon: Users },
-  { href: '/orders', label: 'Commesse', icon: ClipboardList },
-  { href: '/production', label: 'Produzione', icon: Factory },
-  { href: '/inventory', label: 'Magazzino', icon: Package },
-  { href: '/reports', label: 'Report', icon: BarChart3 },
-  { href: '/settings', label: 'Impostazioni', icon: Settings },
+  { href: '/customers', label: 'Customers', icon: Users },
+  { href: '/orders', label: 'Orders', icon: ClipboardList },
+  { href: '/production', label: 'Production', icon: Factory },
+  { href: '/inventory', label: 'Inventory', icon: Package },
+  { href: '/reports', label: 'Reports', icon: BarChart3 },
+  { href: '/settings', label: 'Settings', icon: Settings },
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -35,7 +35,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <p className="text-muted-foreground">Caricamento...</p>
+        <p className="text-muted-foreground">Loading...</p>
       </div>
     );
   }
@@ -50,7 +50,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <div className="flex items-center gap-4 text-sm text-muted-foreground">
           {user && <span>{user.firstName} {user.lastName}</span>}
           <Button variant="ghost" size="sm" className="gap-2" onClick={() => { logout(); router.push('/login'); }}>
-            <LogOut className="h-4 w-4" /> Esci
+            <LogOut className="h-4 w-4" /> Log out
           </Button>
         </div>
       </header>

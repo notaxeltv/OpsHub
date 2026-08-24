@@ -34,7 +34,7 @@ export default function LoginPage() {
       });
       router.push('/dashboard');
     } catch (e) {
-      setError('root', { message: e instanceof Error ? e.message : 'Errore di login' });
+      setError('root', { message: e instanceof Error ? e.message : 'Login failed' });
     }
   }
 
@@ -42,7 +42,7 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-muted/20 p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Accedi a OpsHub</CardTitle>
+          <CardTitle>Sign in to OpsHub</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -57,10 +57,10 @@ export default function LoginPage() {
               {errors.password && <p className="text-sm text-destructive">{errors.password.message}</p>}
             </div>
             {errors.root && <p className="text-sm text-destructive">{errors.root.message}</p>}
-            <Button type="submit" className="w-full" disabled={isSubmitting}>Accedi</Button>
+            <Button type="submit" className="w-full" disabled={isSubmitting}>Sign in</Button>
           </form>
           <p className="mt-4 text-center text-sm text-muted-foreground">
-            Non hai un account? <Link href="/register" className="text-primary underline">Registrati</Link>
+            Don&apos;t have an account? <Link href="/register" className="text-primary underline">Sign up</Link>
           </p>
         </CardContent>
       </Card>

@@ -7,12 +7,12 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'OpsHub',
-  description: 'Sistema operativo per piccole attività',
+  description: 'Operations platform for small businesses',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="it">
+    <html lang="en">
       <body className={inter.className}>
         <Providers>{children}</Providers>
       </body>

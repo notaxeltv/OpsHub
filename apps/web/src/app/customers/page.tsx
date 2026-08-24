@@ -24,39 +24,39 @@ export default function CustomersPage() {
     <AppShell>
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold">Clienti</h2>
-          <p className="text-muted-foreground">Gestisci l&apos;anagrafica clienti</p>
+          <h2 className="text-3xl font-bold">Customers</h2>
+          <p className="text-muted-foreground">Manage your customer directory</p>
         </div>
-        <Button asChild><Link href="/customers/new">Nuovo cliente</Link></Button>
+        <Button asChild><Link href="/customers/new">New customer</Link></Button>
       </div>
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-lg">Lista clienti</CardTitle>
+          <CardTitle className="text-lg">Customer list</CardTitle>
           <form
             className="flex gap-2"
             onSubmit={(e) => { e.preventDefault(); setSearch(searchInput); setPage(1); }}
           >
             <Input
-              placeholder="Cerca..."
+              placeholder="Search..."
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               className="w-48"
             />
-            <Button type="submit" variant="outline" size="sm">Cerca</Button>
+            <Button type="submit" variant="outline" size="sm">Search</Button>
           </form>
         </CardHeader>
         <CardContent>
           {isLoading ? (
-            <p>Caricamento...</p>
+            <p>Loading...</p>
           ) : (
             <>
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b text-left text-muted-foreground">
-                    <th className="pb-2">Nome</th>
+                    <th className="pb-2">Name</th>
                     <th className="pb-2">Email</th>
-                    <th className="pb-2">Telefono</th>
+                    <th className="pb-2">Phone</th>
                     <th className="pb-2"></th>
                   </tr>
                 </thead>
@@ -67,7 +67,7 @@ export default function CustomersPage() {
                       <td className="py-3">{c.email ?? '—'}</td>
                       <td className="py-3">{c.phone ?? '—'}</td>
                       <td className="py-3 text-right">
-                        <Link href={`/customers/${c.id}`} className="text-primary hover:underline">Dettaglio</Link>
+                        <Link href={`/customers/${c.id}`} className="text-primary hover:underline">Details</Link>
                       </td>
                     </tr>
                   ))}

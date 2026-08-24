@@ -46,35 +46,35 @@ export default function NewOrderPage() {
   return (
     <AppShell>
       <Card className="max-w-2xl">
-        <CardHeader><CardTitle>Nuova commessa</CardTitle></CardHeader>
+        <CardHeader><CardTitle>New order</CardTitle></CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit((d) => mutation.mutate(d))} className="space-y-4">
             <div>
-              <Label>Cliente</Label>
+              <Label>Customer</Label>
               <select className="flex h-10 w-full rounded-md border px-3 text-sm" {...register('customerId')}>
-                <option value="">Seleziona...</option>
+                <option value="">Select...</option>
                 {customers?.data.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
               </select>
             </div>
-            <div><Label>Riferimento</Label><Input {...register('reference')} placeholder="COMM-2024-001" /></div>
-            <div><Label>Titolo</Label><Input {...register('title')} /></div>
-            <div><Label>Costo orario (€)</Label><Input type="number" step="0.01" {...register('hourlyRate')} /></div>
+            <div><Label>Reference</Label><Input {...register('reference')} placeholder="ORD-2024-001" /></div>
+            <div><Label>Title</Label><Input {...register('title')} /></div>
+            <div><Label>Hourly rate (€)</Label><Input type="number" step="0.01" {...register('hourlyRate')} /></div>
 
             <div className="space-y-2">
-              <Label>Righe</Label>
+              <Label>Line items</Label>
               {fields.map((field, i) => (
                 <div key={field.id} className="grid grid-cols-3 gap-2">
-                  <Input placeholder="Descrizione" {...register(`items.${i}.description`)} />
-                  <Input type="number" placeholder="Qtà" {...register(`items.${i}.quantity`)} />
-                  <Input type="number" step="0.01" placeholder="Prezzo" {...register(`items.${i}.unitPrice`)} />
+                  <Input placeholder="Description" {...register(`items.${i}.description`)} />
+                  <Input type="number" placeholder="Qty" {...register(`items.${i}.quantity`)} />
+                  <Input type="number" step="0.01" placeholder="Price" {...register(`items.${i}.unitPrice`)} />
                 </div>
               ))}
               <Button type="button" variant="outline" size="sm" onClick={() => append({ description: '', quantity: 1, unitPrice: 0 })}>
-                + Riga
+                + Line item
               </Button>
             </div>
 
-            <Button type="submit" disabled={mutation.isPending}>Crea commessa</Button>
+            <Button type="submit" disabled={mutation.isPending}>Create order</Button>
           </form>
         </CardContent>
       </Card>

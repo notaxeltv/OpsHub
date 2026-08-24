@@ -36,7 +36,7 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['customer', id] }),
   });
 
-  if (isLoading) return <AppShell><p>Caricamento...</p></AppShell>;
+  if (isLoading) return <AppShell><p>Loading...</p></AppShell>;
 
   const customer = data as {
     name: string;
@@ -51,23 +51,23 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
   return (
     <AppShell>
       <div className="mb-6">
-        <Link href="/customers" className="text-sm text-primary hover:underline">← Clienti</Link>
+        <Link href="/customers" className="text-sm text-primary hover:underline">← Customers</Link>
         <h2 className="mt-2 text-3xl font-bold">{customer?.name}</h2>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>
-          <CardHeader><CardTitle className="text-lg">Anagrafica</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-lg">Profile</CardTitle></CardHeader>
           <CardContent className="space-y-2 text-sm">
             <p><span className="text-muted-foreground">Email:</span> {customer?.email ?? '—'}</p>
-            <p><span className="text-muted-foreground">Telefono:</span> {customer?.phone ?? '—'}</p>
-            <p><span className="text-muted-foreground">P.IVA:</span> {customer?.vatNumber ?? '—'}</p>
-            <p><span className="text-muted-foreground">Note:</span> {customer?.notes ?? '—'}</p>
+            <p><span className="text-muted-foreground">Phone:</span> {customer?.phone ?? '—'}</p>
+            <p><span className="text-muted-foreground">VAT:</span> {customer?.vatNumber ?? '—'}</p>
+            <p><span className="text-muted-foreground">Notes:</span> {customer?.notes ?? '—'}</p>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader><CardTitle className="text-lg">Commesse recenti</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-lg">Recent orders</CardTitle></CardHeader>
           <CardContent>
             {customer?.orders?.length ? (
               <ul className="space-y-2 text-sm">
@@ -80,21 +80,21 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
                 ))}
               </ul>
             ) : (
-              <p className="text-sm text-muted-foreground">Nessuna commessa.</p>
+              <p className="text-sm text-muted-foreground">No orders yet.</p>
             )}
           </CardContent>
         </Card>
 
         <Card className="lg:col-span-2">
-          <CardHeader><CardTitle className="text-lg">Contatti</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-lg">Contacts</CardTitle></CardHeader>
           <CardContent>
             {customer?.contacts?.length ? (
               <table className="mb-6 w-full text-sm">
                 <thead>
                   <tr className="border-b text-left text-muted-foreground">
-                    <th className="pb-2">Nome</th>
+                    <th className="pb-2">Name</th>
                     <th className="pb-2">Email</th>
-                    <th className="pb-2">Ruolo</th>
+                    <th className="pb-2">Role</th>
                     <th className="pb-2"></th>
                   </tr>
                 </thead>
@@ -110,7 +110,7 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
                           size="sm"
                           onClick={() => deleteContactMutation.mutate(c.id)}
                         >
-                          Elimina
+                          Delete
                         </Button>
                       </td>
                     </tr>
@@ -118,19 +118,19 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
                 </tbody>
               </table>
             ) : (
-              <p className="mb-4 text-sm text-muted-foreground">Nessun contatto.</p>
+              <p className="mb-4 text-sm text-muted-foreground">No contacts yet.</p>
             )}
 
             <form
               onSubmit={handleSubmit((d) => contactMutation.mutate(d))}
               className="grid gap-3 sm:grid-cols-2"
             >
-              <div><Label>Nome</Label><Input {...register('name', { required: true })} /></div>
+              <div><Label>Name</Label><Input {...register('name', { required: true })} /></div>
               <div><Label>Email</Label><Input type="email" {...register('email')} /></div>
-              <div><Label>Telefono</Label><Input {...register('phone')} /></div>
-              <div><Label>Ruolo</Label><Input {...register('role')} /></div>
+              <div><Label>Phone</Label><Input {...register('phone')} /></div>
+              <div><Label>Role</Label><Input {...register('role')} /></div>
               <div className="sm:col-span-2">
-                <Button type="submit" disabled={contactMutation.isPending}>Aggiungi contatto</Button>
+                <Button type="submit" disabled={contactMutation.isPending}>Add contact</Button>
               </div>
             </form>
           </CardContent>

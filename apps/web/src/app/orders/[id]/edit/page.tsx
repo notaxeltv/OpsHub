@@ -45,20 +45,20 @@ export default function EditOrderPage({ params }: { params: Promise<{ id: string
   return (
     <AppShell>
       <div className="mb-6">
-        <Link href={`/orders/${id}`} className="text-sm text-primary hover:underline">← Dettaglio commessa</Link>
-        <h2 className="mt-2 text-2xl font-bold">Modifica commessa</h2>
+        <Link href={`/orders/${id}`} className="text-sm text-primary hover:underline">← Order details</Link>
+        <h2 className="mt-2 text-2xl font-bold">Edit order</h2>
       </div>
 
       <Card className="max-w-xl">
-        <CardHeader><CardTitle>Dati commessa</CardTitle></CardHeader>
+        <CardHeader><CardTitle>Order details</CardTitle></CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit((d) => mutation.mutate(d))} className="space-y-4">
-            <div><Label>Riferimento</Label><Input {...register('reference')} /></div>
-            <div><Label>Titolo</Label><Input {...register('title')} /></div>
-            <div><Label>Costo orario (€)</Label><Input type="number" step="0.01" {...register('hourlyRate', { valueAsNumber: true })} /></div>
-            <div><Label>Spese esterne (€)</Label><Input type="number" step="0.01" {...register('externalCosts', { valueAsNumber: true })} /></div>
-            <div><Label>Note</Label><Input {...register('notes')} /></div>
-            <Button type="submit" disabled={mutation.isPending}>Salva modifiche</Button>
+            <div><Label>Reference</Label><Input {...register('reference')} /></div>
+            <div><Label>Title</Label><Input {...register('title')} /></div>
+            <div><Label>Hourly rate (€)</Label><Input type="number" step="0.01" {...register('hourlyRate', { valueAsNumber: true })} /></div>
+            <div><Label>External costs (€)</Label><Input type="number" step="0.01" {...register('externalCosts', { valueAsNumber: true })} /></div>
+            <div><Label>Notes</Label><Input {...register('notes')} /></div>
+            <Button type="submit" disabled={mutation.isPending}>Save changes</Button>
           </form>
         </CardContent>
       </Card>

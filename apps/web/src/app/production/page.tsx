@@ -21,23 +21,23 @@ export default function ProductionPage() {
   return (
     <AppShell>
       <div className="mb-8">
-        <h2 className="text-3xl font-bold">Produzione</h2>
-        <p className="text-muted-foreground">Ore e materiali registrati per commessa</p>
+        <h2 className="text-3xl font-bold">Production</h2>
+        <p className="text-muted-foreground">Hours and materials logged per order</p>
       </div>
 
       <Card>
-        <CardHeader><CardTitle className="text-lg">Attività recenti</CardTitle></CardHeader>
+        <CardHeader><CardTitle className="text-lg">Recent activity</CardTitle></CardHeader>
         <CardContent>
           {isLoading ? (
-            <p>Caricamento...</p>
+            <p>Loading...</p>
           ) : (
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b text-left text-muted-foreground">
-                  <th className="pb-2">Commessa</th>
-                  <th className="pb-2">Cliente</th>
-                  <th className="pb-2">Ore</th>
-                  <th className="pb-2">Materiali</th>
+                  <th className="pb-2">Order</th>
+                  <th className="pb-2">Customer</th>
+                  <th className="pb-2">Hours</th>
+                  <th className="pb-2">Materials</th>
                 </tr>
               </thead>
               <tbody>

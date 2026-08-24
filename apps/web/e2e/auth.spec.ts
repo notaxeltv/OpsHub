@@ -7,5 +7,5 @@ test('redirects unauthenticated users to login', async ({ page }) => {
 
 test('login page renders', async ({ page }) => {
   await page.goto('/login');
-  await expect(page.getByRole('heading', { name: /Accedi a OpsHub/i })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /Sign in to OpsHub/i })).toBeVisible();
 });

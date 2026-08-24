@@ -33,15 +33,15 @@ export default function NewCustomerPage() {
   return (
     <AppShell>
       <Card className="max-w-xl">
-        <CardHeader><CardTitle>Nuovo cliente</CardTitle></CardHeader>
+        <CardHeader><CardTitle>New customer</CardTitle></CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit((d) => mutation.mutate(d))} className="space-y-4">
-            <div><Label>Nome</Label><Input {...register('name')} /></div>
+            <div><Label>Name</Label><Input {...register('name')} /></div>
             <div><Label>Email</Label><Input type="email" {...register('email')} /></div>
-            <div><Label>Telefono</Label><Input {...register('phone')} /></div>
-            <div><Label>P.IVA</Label><Input {...register('vatNumber')} /></div>
-            <div><Label>Note</Label><Input {...register('notes')} /></div>
-            <Button type="submit" disabled={mutation.isPending}>Salva</Button>
+            <div><Label>Phone</Label><Input {...register('phone')} /></div>
+            <div><Label>VAT number</Label><Input {...register('vatNumber')} /></div>
+            <div><Label>Notes</Label><Input {...register('notes')} /></div>
+            <Button type="submit" disabled={mutation.isPending}>Save</Button>
           </form>
         </CardContent>
       </Card>

@@ -22,8 +22,8 @@ export default function ReportsPage() {
     <AppShell>
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold">Report</h2>
-          <p className="text-muted-foreground">Margini per commessa</p>
+          <h2 className="text-3xl font-bold">Reports</h2>
+          <p className="text-muted-foreground">Margins per order</p>
         </div>
         <a
           href={`${process.env.NEXT_PUBLIC_API_URL}/reports/margins/export/csv`}
@@ -47,24 +47,24 @@ export default function ReportsPage() {
             }
           }}
         >
-          Esporta CSV
+          Export CSV
         </a>
       </div>
 
       <Card>
-        <CardHeader><CardTitle className="text-lg">Margini per commessa</CardTitle></CardHeader>
+        <CardHeader><CardTitle className="text-lg">Margins by order</CardTitle></CardHeader>
         <CardContent>
           {isLoading ? (
-            <p>Caricamento...</p>
+            <p>Loading...</p>
           ) : (
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b text-left text-muted-foreground">
-                  <th className="pb-2">Riferimento</th>
-                  <th className="pb-2">Cliente</th>
-                  <th className="pb-2">Ricavi</th>
-                  <th className="pb-2">Costi</th>
-                  <th className="pb-2">Margine</th>
+                  <th className="pb-2">Reference</th>
+                  <th className="pb-2">Customer</th>
+                  <th className="pb-2">Revenue</th>
+                  <th className="pb-2">Costs</th>
+                  <th className="pb-2">Margin</th>
                   <th className="pb-2">%</th>
                 </tr>
               </thead>

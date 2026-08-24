@@ -37,7 +37,7 @@ export default function RegisterPage() {
       });
       router.push('/dashboard');
     } catch (e) {
-      setError('root', { message: e instanceof Error ? e.message : 'Errore di registrazione' });
+      setError('root', { message: e instanceof Error ? e.message : 'Registration failed' });
     }
   }
 
@@ -45,22 +45,22 @@ export default function RegisterPage() {
     <div className="flex min-h-screen items-center justify-center bg-muted/20 p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Crea il tuo workspace OpsHub</CardTitle>
+          <CardTitle>Create your OpsHub workspace</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="firstName">Nome</Label>
+                <Label htmlFor="firstName">First name</Label>
                 <Input id="firstName" {...register('firstName')} />
               </div>
               <div>
-                <Label htmlFor="lastName">Cognome</Label>
+                <Label htmlFor="lastName">Last name</Label>
                 <Input id="lastName" {...register('lastName')} />
               </div>
             </div>
             <div>
-              <Label htmlFor="organizationName">Nome azienda</Label>
+              <Label htmlFor="organizationName">Company name</Label>
               <Input id="organizationName" {...register('organizationName')} />
             </div>
             <div>
@@ -72,10 +72,10 @@ export default function RegisterPage() {
               <Input id="password" type="password" {...register('password')} />
             </div>
             {errors.root && <p className="text-sm text-destructive">{errors.root.message}</p>}
-            <Button type="submit" className="w-full" disabled={isSubmitting}>Crea account</Button>
+            <Button type="submit" className="w-full" disabled={isSubmitting}>Create account</Button>
           </form>
           <p className="mt-4 text-center text-sm text-muted-foreground">
-            Hai già un account? <Link href="/login" className="text-primary underline">Accedi</Link>
+            Already have an account? <Link href="/login" className="text-primary underline">Sign in</Link>
           </p>
         </CardContent>
       </Card>

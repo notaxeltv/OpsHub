@@ -78,7 +78,6 @@ Start at **$1,499** fixed price or **$1,200** auction with reserve.
 - No production deployment (buyer deploys; GHCR workflow provided)
 - No privacy policy / terms of service pages
 - Stripe must be configured with buyer's own keys
-- UI copy is mostly Italian in the app (landing is English)
 - Granular per-module roles (documented as future work in `DOMAIN.md`)
 
 ---
